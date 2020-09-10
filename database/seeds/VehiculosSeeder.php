@@ -13,16 +13,12 @@ class vehiculosSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
-        for ($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             DB::table('vehiculos')->insert(array(
-                'ciudad' => $faker->city,
-                'departamento' => $faker->state,
-                'direccion' => $faker->address,
                 'propietario_id' => random_int(1, 50),
-                'proposito' => $faker->randomElement(['arrendamiento', 'venta']),
-                'canon' => $faker->randomFloat(),
-                'tipo' => $faker->randomElement(['apartaestudio', 'apartamento', 'casa', 'bodega']),
-                'habitaciones' => random_int(0, 4),
+                'modelo' => $faker->randomElement(['2018', '2019', '2020']),
+                'placa' =>  $faker->randomElement(['z', 'w', 't','v', 'x', 'o']) .   $faker->randomElement(['a', 'b' , 'z', 'w', 't']) .  $faker->randomElement(['z', 'w', 't', 'u', 'k','c']) .  '-'  . $faker->randomElement(['2018', '2019', '2020']),
+                'color' => $faker->randomElement(['blaco', 'negro', 'azul', 'rojo']),
             ));
         }
     }

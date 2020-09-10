@@ -23,10 +23,7 @@ class PropietarioSeeder extends Seeder
                 'ciudad' => $faker->city,
                 'departamento' => $faker->state,
                 'direccion' => $faker->address,
-                'barrio' => $faker->city,
                 'telefono' => $faker->phoneNumber,
-                'opcional_telefono' => $faker->phoneNumber,
-                'accept' => 'Activo',
             ));
         }
     }

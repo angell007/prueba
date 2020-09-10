@@ -8,15 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class vehiculo extends Model
 {
     protected $fillable = [
-        'direccion',
+       
         'propietario_id',
-        'ciudad',
-        'departamento',
-        'tipo',
-        'proposito',
-        'habitaciones',
-        'canon',
-        'portada'
+        'color',
+        'modelo',
+        'placa',
+        
     ];
 
 

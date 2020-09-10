@@ -13,11 +13,8 @@ class Propietario extends Model
         'identificacion',
         'tipo_identificacion',
         'ciudad',
-        'departamento',
         'direccion',
         'barrio',
         'telefono',
-        'opcional_telefono'
     ];
-
 }

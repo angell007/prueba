@@ -21,14 +21,10 @@ class CreatePropietariosTable extends Migration
             $table->string('email')->nullable();
             $table->string('identificacion')->unique();
             $table->string('tipo_identificacion');
-            $table->string('ciudad')->nullable();
             $table->string('departamento')->nullable();
+            $table->string('ciudad')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('barrio')->nullable();
-            $table->string('last')->nullable();
-            $table->string('accept')->nullable();
             $table->string('telefono')->nullable();
-            $table->string('opcional_telefono')->nullable();
             $table->timestamps();
         });
     }

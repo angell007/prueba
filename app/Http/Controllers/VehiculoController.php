@@ -6,7 +6,7 @@ use App\Http\Requests\VehiculoStoreRequest;
 use App\Http\Requests\VehiculoUpdateRequest;
 use App\Repositories\VehiculoRepository;
 
-class InmuebleController extends Controller
+class VehiculoController extends Controller
 {
 
     private $repository;
@@ -23,18 +23,10 @@ class InmuebleController extends Controller
 
     public function index()
     {
-        // if (request()->ajax())  {
-        // if (request()->isJson()) {
-            // if ( request()->acceptsJson()) {
-            // if (request()->expectsJson()) {
-            if (request()->wantsJson()) {
+        if (request()->wantsJson()) {
             return response()->json($this->repository->all());
-        } 
-        // else {
-            return view('inmueble.index');
-        // }
-
-        // abort(404);
+        }
+        return view('inmueble.index');
     }
 
     public function show($id)

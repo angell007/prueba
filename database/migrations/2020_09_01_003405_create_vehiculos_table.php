@@ -15,15 +15,10 @@ class CreatevehiculosTable extends Migration
     {
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->string('ciudad');
             $table->unsignedBigInteger('propietario_id');
-            $table->string('departamento');
-            $table->string('direccion');
-            $table->enum('proposito', ['arrendamiento', 'venta']);
-            $table->string('canon')->nullable();
-            $table->string('portada')->nullable();
-            $table->string('habitaciones')->nullable();
-            $table->enum('tipo', ['apartaestudio', 'apartamento', 'casa', 'bodega']);
+            $table->string('placa')->unique();
+            $table->string('modelo');
+            $table->string('color');
             $table->timestamps();
         });
     }

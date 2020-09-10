@@ -12,8 +12,8 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::middleware('auth')->resource('propietarios', 'PropietarioController')->names('propietarios');
-Route::middleware('auth')->resource('vehiculos', 'vehiculoController')->names('vehiculos');
+Route::middleware('auth')->resource('propietarios', 'PropietarioController')->except('store', 'update', 'destroy')->names('propietarios');
+Route::middleware('auth')->resource('vehiculos', 'VehiculoController')->except('store', 'update', 'destroy')->names('vehiculos');
 Route::get('/test',  function () {
     return vehiculo::with('propietario:id,full_name')->get(['*']);
 });

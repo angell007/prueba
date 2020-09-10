@@ -3,5 +3,5 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->resource('propietarios', 'PropietarioController')->names('propietarios');
-Route::middleware('auth')->resource('vehiculos', 'vehiculoController')->names('vehiculos');
+Route::middleware('json')->resource('propietarios', 'PropietarioController')->names('propietarios');
+Route::middleware('json')->resource('vehiculos', 'VehiculoController')->names('vehiculos');

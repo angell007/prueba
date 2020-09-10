@@ -2,30 +2,28 @@
 
 namespace App\Repositories;
 
-use App\vehiculo;
+use App\Vehiculo;
 
 use App\InterfaceRepos\RepositorioInterface;
 
-class vehiculoRepository implements RepositorioInterface
+class VehiculoRepository implements RepositorioInterface
 {
 
     protected $model;
 
     /**
-     * vehiculoRepository constructor.
+     * VehiculoRepository constructor.
      *
-     * @param vehiculo $propietario
+     * @param Vehiculo $propietario
      */
-    public function __construct(vehiculo $propietario)
+    public function __construct(Vehiculo $propietario)
     {
         $this->model = $propietario;
     }
 
     public function all()
     {
-        // return $this->model->get(['*']);
         return $this->model->with('propietario:id,nombre,apellido,full_name')->get(['*']);
-
     }
 
     public function create(array $data)
