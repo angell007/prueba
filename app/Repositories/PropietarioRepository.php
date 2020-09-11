@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Propietario;
 
 use App\InterfaceRepos\RepositorioInterface;
+use App\Vehiculo;
 
 class PropietarioRepository implements RepositorioInterface
 {
@@ -23,7 +24,7 @@ class PropietarioRepository implements RepositorioInterface
 
     public function all()
     {
-        return $this->model->get(['*']);
+        return $this->model->with('vehiculos:propietario_id,placa')->get(['*']);
     }
 
     public function create(array $data)
@@ -46,5 +47,22 @@ class PropietarioRepository implements RepositorioInterface
     {
         $propietario = $this->model->find($id);
         return $propietario;
+    }
+
+    public function filtrar($filtro, $query)
+    {
+        switch ($filtro) {
+            case 'Nombre':
+                return  Propietario::where('nombre', 'like', '%' . $query . '%')->with('vehiculos')->get(['*']);
+                break;
+            case 'Marca':
+                return   Propietario::with('vehiculos')->whereHas('vehiculos',  function ($q) use ($query) {
+                    return $q->where('marca', 'like', '%' . $query . '%');
+                })->get();
+                break;
+            case 'Cedula':
+                return  Propietario::where('identificacion', 'like', '%' . $query . '%')->with('vehiculos')->get(['*']);
+                break;
+        }
     }
 }

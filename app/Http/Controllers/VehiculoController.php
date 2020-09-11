@@ -26,7 +26,7 @@ class VehiculoController extends Controller
         if (request()->wantsJson()) {
             return response()->json($this->repository->all());
         }
-        return view('inmueble.index');
+        return view('vehiculo.index');
     }
 
     public function show($id)

@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 
 export default {
     data: () => ({
@@ -15,23 +15,47 @@ export default {
             { text: "Apellido", value: "apellido" },
             { text: "Direccion", value: "direccion" },
             { text: "Telefono", value: "telefono" },
-            { text: "Estado", value: "accept" },
+            { text: "Vehiculos", value: "vehiculos" },
             { text: "Actions", value: "actions", sortable: false },
         ],
-        search: "",
+
+        customFilter:{
+            filtro: "",
+            query: "",
+        },
         mostrar: false,
         editedIndex: -1,
-        editedItem: {
+        editedPropietario: {
             nombre: "",
-            identificacion: "",
             apellido: "",
+            email: "",
+            identificacion: "",
             tipo_identificacion: "",
+            ciudad: "",
+            direccion: "",
+            telefono: ""
         },
-        defaultItem: {
+        editedVehiculo: {
+            color: "",
+            marca: "",
+            modelo: "",
+            placa: "",
+        },
+        defaultVehiculo: {
+            color: "",
+            marca: "",
+            modelo: "",
+            placa: "",
+        },
+        defaultPropietario: {
             nombre: "",
-            identificacion: "",
             apellido: "",
+            email: "",
+            identificacion: "",
             tipo_identificacion: "",
+            ciudad: "",
+            direccion: "",
+            telefono: ""
         },
     }),
 
@@ -42,6 +66,7 @@ export default {
                 : "Editar Propietario";
         },
         propietariosAll() {
+            console.log('propiedad conmutada');
             return this.$store.getters.getPropietarios;
         },
     },
@@ -61,9 +86,15 @@ export default {
             await this.$store.dispatch("getPropietarios");
         },
 
+        async buscar() {
+            if (this.customFilter.filtro && this.customFilter.query) {
+                await this.$store.dispatch("getPropietariosFiltrados", this.customFilter);
+            }
+        },
+
         edit(item) {
             this.editedIndex = this.propietariosAll.indexOf(item);
-            this.editedItem = Object.assign({}, item);
+            this.editedPropietario = Object.assign({}, item);
             this.dialog = true;
         },
 
@@ -80,18 +111,17 @@ export default {
         close() {
             this.dialog = false;
             this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedPropietario = Object.assign({}, this.defaultPropietario);
                 this.editedIndex = -1;
             });
         },
 
         async save() {
             if (this.editedIndex > -1) {
-                console.log([this.editedItem.id, this.editedIndex]);
                 try {
-                    const response = await Axios.patch(
-                        `https://vehiculos.test/propietarios/${this.editedItem.id}`,
-                        this.editedItem
+                    const response = await axios.patch(
+                        `https://vehiculos.test/api/propietarios/${this.editedPropietario.id}`,
+                        this.editedPropietario
                     );
                     this.getCambio();
                 } catch (error) {
@@ -99,16 +129,16 @@ export default {
                 }
             } else {
                 try {
-                    const response = await Axios.post(
-                        "https://vehiculos.test/propietarios",
-                        this.editedItem
+                    const response = await axios.post(
+                        "https://vehiculos.test/api/propietarios",
+                        Object.assign(this.editedPropietario, this.editedVehiculo)
                     );
+                    if (response.status == 200) this.close();
                     this.getCambio();
                 } catch (error) {
                     console.log(error);
                 }
             }
-            this.close();
         },
     },
 };

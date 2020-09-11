@@ -1954,27 +1954,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Telefono",
         value: "telefono"
       }, {
-        text: "Estado",
-        value: "accept"
+        text: "Vehiculos",
+        value: "vehiculos"
       }, {
         text: "Actions",
         value: "actions",
         sortable: false
       }],
-      search: "",
+      customFilter: {
+        filtro: "",
+        query: ""
+      },
       mostrar: false,
       editedIndex: -1,
-      editedItem: {
+      editedPropietario: {
         nombre: "",
-        identificacion: "",
         apellido: "",
-        tipo_identificacion: ""
+        email: "",
+        identificacion: "",
+        tipo_identificacion: "",
+        ciudad: "",
+        direccion: "",
+        telefono: ""
       },
-      defaultItem: {
+      editedVehiculo: {
+        color: "",
+        marca: "",
+        modelo: "",
+        placa: ""
+      },
+      defaultVehiculo: {
+        color: "",
+        marca: "",
+        modelo: "",
+        placa: ""
+      },
+      defaultPropietario: {
         nombre: "",
-        identificacion: "",
         apellido: "",
-        tipo_identificacion: ""
+        email: "",
+        identificacion: "",
+        tipo_identificacion: "",
+        ciudad: "",
+        direccion: "",
+        telefono: ""
       }
     };
   },
@@ -1983,6 +2006,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.editedIndex === -1 ? "Nuevo Propietario" : "Editar Propietario";
     },
     propietariosAll: function propietariosAll() {
+      console.log('propiedad conmutada');
       return this.$store.getters.getPropietarios;
     }
   },
@@ -2014,96 +2038,117 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    edit: function edit(item) {
-      this.editedIndex = this.propietariosAll.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    destroy: function destroy(item) {
+    buscar: function buscar() {
       var _this2 = this;
 
-      var index = this.propietariosAll.indexOf(item);
-      confirm("Are you sure you want to delete this item?") && this.$store.dispatch("destroyArrendatario", item.id).then(function (x) {
-        _this2.propietariosAll.splice(index, 1);
-
-        alert("Eliminado correcto");
-
-        _this2.getCambio();
-      });
-    },
-    close: function close() {
-      var _this3 = this;
-
-      this.dialog = false;
-      this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
-      });
-    },
-    save: function save() {
-      var _this4 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response, _response;
-
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(_this4.editedIndex > -1)) {
-                  _context2.next = 14;
+                if (!(_this2.customFilter.filtro && _this2.customFilter.query)) {
+                  _context2.next = 3;
                   break;
                 }
 
-                console.log([_this4.editedItem.id, _this4.editedIndex]);
-                _context2.prev = 2;
-                _context2.next = 5;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.patch("https://vehiculos.test/propietarios/".concat(_this4.editedItem.id), _this4.editedItem);
+                _context2.next = 3;
+                return _this2.$store.dispatch("getPropietariosFiltrados", _this2.customFilter);
 
-              case 5:
-                response = _context2.sent;
-
-                _this4.getCambio();
-
-                _context2.next = 12;
-                break;
-
-              case 9:
-                _context2.prev = 9;
-                _context2.t0 = _context2["catch"](2);
-                console.log(_context2.t0);
-
-              case 12:
-                _context2.next = 24;
-                break;
-
-              case 14:
-                _context2.prev = 14;
-                _context2.next = 17;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://vehiculos.test/propietarios", _this4.editedItem);
-
-              case 17:
-                _response = _context2.sent;
-
-                _this4.getCambio();
-
-                _context2.next = 24;
-                break;
-
-              case 21:
-                _context2.prev = 21;
-                _context2.t1 = _context2["catch"](14);
-                console.log(_context2.t1);
-
-              case 24:
-                _this4.close();
-
-              case 25:
+              case 3:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[2, 9], [14, 21]]);
+        }, _callee2);
+      }))();
+    },
+    edit: function edit(item) {
+      this.editedIndex = this.propietariosAll.indexOf(item);
+      this.editedPropietario = Object.assign({}, item);
+      this.dialog = true;
+    },
+    destroy: function destroy(item) {
+      var _this3 = this;
+
+      var index = this.propietariosAll.indexOf(item);
+      confirm("Are you sure you want to delete this item?") && this.$store.dispatch("destroyArrendatario", item.id).then(function (x) {
+        _this3.propietariosAll.splice(index, 1);
+
+        alert("Eliminado correcto");
+
+        _this3.getCambio();
+      });
+    },
+    close: function close() {
+      var _this4 = this;
+
+      this.dialog = false;
+      this.$nextTick(function () {
+        _this4.editedPropietario = Object.assign({}, _this4.defaultPropietario);
+        _this4.editedIndex = -1;
+      });
+    },
+    save: function save() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response, _response;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!(_this5.editedIndex > -1)) {
+                  _context3.next = 13;
+                  break;
+                }
+
+                _context3.prev = 1;
+                _context3.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.patch("https://vehiculos.test/api/propietarios/".concat(_this5.editedPropietario.id), _this5.editedPropietario);
+
+              case 4:
+                response = _context3.sent;
+
+                _this5.getCambio();
+
+                _context3.next = 11;
+                break;
+
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](1);
+                console.log(_context3.t0);
+
+              case 11:
+                _context3.next = 24;
+                break;
+
+              case 13:
+                _context3.prev = 13;
+                _context3.next = 16;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://vehiculos.test/api/propietarios", Object.assign(_this5.editedPropietario, _this5.editedVehiculo));
+
+              case 16:
+                _response = _context3.sent;
+                if (_response.status == 200) _this5.close();
+
+                _this5.getCambio();
+
+                _context3.next = 24;
+                break;
+
+              case 21:
+                _context3.prev = 21;
+                _context3.t1 = _context3["catch"](13);
+                console.log(_context3.t1);
+
+              case 24:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[1, 8], [13, 21]]);
       }))();
     }
   }
@@ -2136,30 +2181,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: "Propietario",
         value: "propietario.nombre"
       }, {
-        text: "Direccion",
-        align: "start",
-        sortable: false,
-        filterable: false,
-        value: "direccion"
+        text: "Marca",
+        value: "marca"
       }, {
-        text: "Ciudad",
-        value: "ciudad"
+        text: "Modelo",
+        value: "modelo"
       }, {
-        text: "Proposito",
-        value: "proposito"
+        text: "Color",
+        value: "color"
       }, {
-        text: "Canon",
-        value: "canon"
-      }, {
-        text: "Habitaciones",
-        value: "habitaciones"
-      }, {
-        text: "Tipo",
-        value: "tipo"
-      }, {
-        text: "Actions",
-        value: "actions",
-        sortable: false
+        text: "Placa",
+        value: "placa"
       }],
       loading: true,
       search: "",
@@ -3570,9 +3602,20 @@ var render = function() {
                   headers: _vm.headers,
                   items: _vm.propietariosAll,
                   "sort-by": "identificacion",
-                  search: _vm.search
+                  sortDesc: true
                 },
                 scopedSlots: _vm._u([
+                  {
+                    key: "item.vehiculos",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return _vm._l(item.vehiculos, function(vehiculo, index) {
+                        return _c("ul", { key: index }, [
+                          _c("li", [_vm._v(_vm._s(vehiculo.placa))])
+                        ])
+                      })
+                    }
+                  },
                   {
                     key: "top",
                     fn: function() {
@@ -3584,27 +3627,61 @@ var render = function() {
                             _c("v-toolbar-title", [_vm._v("Propietarios")]),
                             _vm._v(" "),
                             _c("v-divider", {
-                              staticClass: "mx-4",
                               attrs: { inset: "", vertical: "" }
                             }),
                             _vm._v(" "),
                             _c("v-spacer"),
                             _vm._v(" "),
-                            _c("v-text-field", {
-                              attrs: {
-                                "append-icon": "mdi-magnify",
-                                label: "Search",
-                                "single-line": "",
-                                "hide-details": ""
-                              },
-                              model: {
-                                value: _vm.search,
-                                callback: function($$v) {
-                                  _vm.search = $$v
-                                },
-                                expression: "search"
-                              }
-                            })
+                            _c(
+                              "div",
+                              { staticClass: "ml-2 row" },
+                              [
+                                _c("v-select", {
+                                  staticClass: "col-4",
+                                  attrs: {
+                                    label: "Seleccione",
+                                    items: ["Marca", "Nombre", "Cedula"]
+                                  },
+                                  model: {
+                                    value: _vm.customFilter.filtro,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.customFilter, "filtro", $$v)
+                                    },
+                                    expression: "customFilter.filtro"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-text-field", {
+                                  staticClass: "col-4",
+                                  attrs: {
+                                    "append-icon": "mdi-magnify",
+                                    label: "Search",
+                                    "single-line": ""
+                                  },
+                                  model: {
+                                    value: _vm.customFilter.query,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.customFilter, "query", $$v)
+                                    },
+                                    expression: "customFilter.query"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-info py-0",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.buscar()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Buscar")]
+                                )
+                              ],
+                              1
+                            )
                           ],
                           1
                         ),
@@ -3691,18 +3768,19 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem.nombre,
+                                                          _vm.editedPropietario
+                                                            .nombre,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            _vm.editedItem,
+                                                            _vm.editedPropietario,
                                                             "nombre",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.nombre"
+                                                          "editedPropietario.nombre"
                                                       }
                                                     })
                                                   ],
@@ -3725,19 +3803,55 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem
+                                                          _vm.editedPropietario
                                                             .apellido,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            _vm.editedItem,
+                                                            _vm.editedPropietario,
                                                             "apellido",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.apellido"
+                                                          "editedPropietario.apellido"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        type: "email",
+                                                        label: "Email"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedPropietario
+                                                            .email,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedPropietario,
+                                                            "email",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedPropietario.email"
                                                       }
                                                     })
                                                   ],
@@ -3766,19 +3880,19 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem
+                                                          _vm.editedPropietario
                                                             .tipo_identificacion,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            _vm.editedItem,
+                                                            _vm.editedPropietario,
                                                             "tipo_identificacion",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.tipo_identificacion"
+                                                          "editedPropietario.tipo_identificacion"
                                                       }
                                                     })
                                                   ],
@@ -3797,23 +3911,290 @@ var render = function() {
                                                   [
                                                     _c("v-text-field", {
                                                       attrs: {
+                                                        type: "number",
                                                         label: "Nº Documento*"
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.editedItem
+                                                          _vm.editedPropietario
                                                             .identificacion,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            _vm.editedItem,
+                                                            _vm.editedPropietario,
                                                             "identificacion",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "editedItem.identificacion"
+                                                          "editedPropietario.identificacion"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Ciudad"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedPropietario
+                                                            .ciudad,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedPropietario,
+                                                            "ciudad",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedPropietario.ciudad"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Direccion"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedPropietario
+                                                            .direccion,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedPropietario,
+                                                            "direccion",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedPropietario.direccion"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Telefono"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedPropietario
+                                                            .telefono,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedPropietario,
+                                                            "telefono",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedPropietario.telefono"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "12",
+                                                      md: "12"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-spacer", [
+                                                      _vm._v(
+                                                        "Zona para el vehiculo"
+                                                      )
+                                                    ])
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: { label: "Color" },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedVehiculo
+                                                            .color,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedVehiculo,
+                                                            "color",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedVehiculo.color"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "Modelo"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedVehiculo
+                                                            .modelo,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedVehiculo,
+                                                            "modelo",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedVehiculo.modelo"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: { label: "Placa" },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedVehiculo
+                                                            .placa,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedVehiculo,
+                                                            "placa",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedVehiculo.placa"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "6",
+                                                      md: "4"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-autocomplete", {
+                                                      attrs: {
+                                                        items: [
+                                                          "Kia",
+                                                          "Renault",
+                                                          "Bmw",
+                                                          "Bugatti"
+                                                        ],
+                                                        label: "Marca"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.editedPropietario
+                                                            .marca,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.editedPropietario,
+                                                            "marca",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "editedPropietario.marca"
                                                       }
                                                     })
                                                   ],
@@ -3874,7 +4255,7 @@ var render = function() {
                     proxy: true
                   },
                   {
-                    key: "item[`actions`]",
+                    key: "item.actions",
                     fn: function(ref) {
                       var item = ref.item
                       return [
@@ -4055,219 +4436,9 @@ var render = function() {
                                     _c(
                                       "v-container",
                                       [
-                                        _c(
-                                          "v-row",
-                                          { attrs: { justify: "center" } },
-                                          [
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: {
-                                                    autocomplete: "off",
-                                                    label: "Ciudad"
-                                                  },
-                                                  model: {
-                                                    value:
-                                                      _vm.editedItem.ciudad,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "ciudad",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.ciudad"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: {
-                                                    autocomplete: "off",
-                                                    label: "Departamento"
-                                                  },
-                                                  model: {
-                                                    value:
-                                                      _vm.editedItem
-                                                        .departamento,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "departamento",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.departamento"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: {
-                                                    autocomplete: "off",
-                                                    label: "Canon"
-                                                  },
-                                                  model: {
-                                                    value: _vm.editedItem.canon,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "canon",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.canon"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: {
-                                                    autocomplete: "off",
-                                                    type: "number",
-                                                    label: "Habitaciones"
-                                                  },
-                                                  model: {
-                                                    value:
-                                                      _vm.editedItem
-                                                        .habitaciones,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "habitaciones",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.habitaciones"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-autocomplete", {
-                                                  attrs: {
-                                                    items: [
-                                                      "arrendamiento",
-                                                      "venta"
-                                                    ],
-                                                    label: "Proposito"
-                                                  },
-                                                  model: {
-                                                    value:
-                                                      _vm.editedItem.proposito,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "proposito",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.proposito"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "6"
-                                                }
-                                              },
-                                              [
-                                                _c("v-autocomplete", {
-                                                  attrs: {
-                                                    items: [
-                                                      "apartaestudio",
-                                                      "apartamento",
-                                                      "casa",
-                                                      "bodega"
-                                                    ],
-                                                    label: "Tipo de vehiculo"
-                                                  },
-                                                  model: {
-                                                    value: _vm.editedItem.tipo,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "tipo",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.tipo"
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
+                                        _c("v-row", {
+                                          attrs: { justify: "center" }
+                                        })
                                       ],
                                       1
                                     )
@@ -4317,7 +4488,7 @@ var render = function() {
                     proxy: true
                   },
                   {
-                    key: "item[`actions`]",
+                    key: "item.actions",
                     fn: function(ref) {
                       var item = ref.item
                       return [
@@ -61759,6 +61930,19 @@ var PropietarioService = /** @class */ (function () {
             });
         });
     };
+    PropietarioService.prototype.getAllFiltrados = function (filtro, query) {
+        return __awaiter(this, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        response = axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://vehiculos.test/api/propietarios/filtrados/q?filtro=" + filtro + "&query=" + query);
+                        return [4 /*yield*/, response];
+                    case 1: return [2 /*return*/, (_a.sent()).data.data];
+                }
+            });
+        });
+    };
     PropietarioService.prototype.destroyPropietario = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var response;
@@ -61961,13 +62145,27 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
                             return [4 /*yield*/, propietarios.getAll()];
                         case 1:
                             data = _a.sent();
-                            console.log(['propietarios', data]);
                             context.commit("propietarios", data);
                             return [2 /*return*/];
                     }
                 });
             });
         },
+        getPropietariosFiltrados: function (context, customFilter) { return __awaiter(void 0, void 0, void 0, function () {
+            var propietarios, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        propietarios = new _services_PropietarioService__WEBPACK_IMPORTED_MODULE_0__["default"];
+                        return [4 /*yield*/, propietarios.getAllFiltrados(customFilter.filtro, customFilter.query)];
+                    case 1:
+                        data = _a.sent();
+                        console.log('obteniendo filtrados', data);
+                        context.commit("propietarios", data);
+                        return [2 /*return*/];
+                }
+            });
+        }); },
         destroyPropietario: function (context, id) {
             return __awaiter(this, void 0, void 0, function () {
                 var propietarios, data;

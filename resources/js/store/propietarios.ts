@@ -21,9 +21,14 @@ export default ({
         getPropietarios: async function (context: any) {
             const propietarios = new PropietarioService;
             const data = await propietarios.getAll()
-            console.log(['propietarios', data]);
             context.commit("propietarios", data)
+        },
 
+        getPropietariosFiltrados: async (context: any, customFilter: any) => {
+            const propietarios = new PropietarioService;
+            const data = await propietarios.getAllFiltrados(customFilter.filtro, customFilter.query);
+            console.log('obteniendo filtrados', data);
+            context.commit("propietarios", data);
         },
 
         destroyPropietario: async function (context: any, id: number) {
@@ -40,6 +45,7 @@ export default ({
 
     mutations: {
         propietarios(state: any, data: Array<string>) {
+
             return state.propietarios = data
         },
         propietario(state: any, data: any) {

@@ -17,4 +17,9 @@ class Propietario extends Model
         'barrio',
         'telefono',
     ];
+
+    public function vehiculos()
+    {
+        return $this->hasMany(Vehiculo::class, 'propietario_id');
+    }
 }

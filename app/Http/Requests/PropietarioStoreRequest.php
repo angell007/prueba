@@ -24,7 +24,7 @@ class PropietarioStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            // 'identificacion' => 'reuired|numeric'
         ];
     }
 }

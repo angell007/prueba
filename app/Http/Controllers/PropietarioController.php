@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PropietarioStoreRequest;
 use App\Http\Requests\PropietarioUpdateRequest;
 use App\Repositories\PropietarioRepository;
+use App\Repositories\VehiculoRepository;
+use Illuminate\Support\Facades\DB;
 
 class PropietarioController extends Controller
 {
@@ -42,13 +44,19 @@ class PropietarioController extends Controller
         }
     }
 
-    public function store(PropietarioStoreRequest $propietarioRequest)
+    public function store(PropietarioStoreRequest $propietarioRequest, VehiculoRepository $vehiculoRepository)
     {
+        $dataPropietario = $propietarioRequest->except(['color', 'placa', 'modelo', 'marca']);
+        $dataVehiculo = $propietarioRequest->only(['color', 'placa', 'modelo', 'marca']);
+        DB::beginTransaction();
         try {
-            $propietario = $this->repository->Create($propietarioRequest->all());
-            return response()->json(['data' => $propietario, 'code' => 200], 200);
+            $propietario = $this->repository->Create($dataPropietario);
+            $vehiculo = $vehiculoRepository->Create(array_merge(['propietario_id' => $propietario->id], $dataVehiculo));
+            DB::commit();
+            return response()->json(['data' => [$propietario, $vehiculo], 'code' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage(), 'code' => 500], 500);
+            DB::rollback();
+            return response()->json(['error' => $th->getMessage(), 'code' => 200], 200);
         }
     }
 
@@ -71,6 +79,16 @@ class PropietarioController extends Controller
                 return response()->json(['data' =>  'Eliminado Correcto', 'code' => 200], 200);
             }
             return response()->json(['error' =>  'Operacion no realizada. Posible error: Propietario no found', 'code' => 404], 404);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage(), 'code' => 500], 500);
+        }
+    }
+
+    public function filtrar()
+    {
+        try {
+            $data = $this->repository->filtrar(request()->get('filtro'), request()->get('query'));
+            return response()->json(['data' =>   $data, 'code' => 200], 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage(), 'code' => 500], 500);
         }
